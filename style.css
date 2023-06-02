@@ -23,13 +23,13 @@ body {
 
 .category {
   width: 30%;
-/*   background: #02E1E8; */
-    background: linear-gradient(to right, #02001C 0%, #333399 100%);
+  background: #02E1E8;
+/*     background: linear-gradient(to right, #02001C 0%, #333399 100%); */
 
   border: 1px solid #474a4d;
   border-radius: 15px;
   padding: 20px;
-  box-shadow: 0 0 10px #f708f7; /* Neon glow effect */
+  box-shadow: 0 0 20px #02E1E8; /* Neon glow effect */
 }
 
 .label {
