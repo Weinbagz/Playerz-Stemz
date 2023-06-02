@@ -214,20 +214,21 @@ function setupInterface() {
 
     effectsSelects[category] = effectsSelect;
     effectsSelect.changed(() => {
-      let effectName = effectsSelects[category].value();
-      let effect = effects[category][effectName];
+  let effectName = effectsSelects[category].value();
+  let effect = effects[category][effectName];
 
-      if (currentEffects[category]) {
-        currentPlayers[category].disconnect(currentEffects[category]);
-      }
+  if (currentEffects[category]) {
+    currentPlayers[category].disconnect(currentEffects[category]);
+    currentEffects[category].disconnect(limiter); // disconnect old effect from limiter
+  }
 
-      if (effectName !== "none") {
-        currentPlayers[category].connect(effect);
-        effect.wet.value = wetDrySliders[category].value();
-        effect.toDestination();
-        currentEffects[category] = effect;
-      }
-    });
+  if (effectName !== "none") {
+    currentPlayers[category].connect(effect);
+    effect.wet.value = wetDrySliders[category].value();
+    effect.connect(limiter); // connect new effect to limiter
+    currentEffects[category] = effect;
+  }
+});
 
     let wetDryContainer = createElement("div");
     wetDryContainer.addClass("wetDry");
