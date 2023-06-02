@@ -1,7 +1,7 @@
 let players = {};
 let effects = {};
 let categories = ["Bass", "Drums", "Lead", "Chords", "Percussion", "EFX"];
-let effectsList = ["none", "delay", "reverb", "distortion", "tremolo"];
+let effectsList = ["none", "delay", "reverb", "distortion", "vibrato"];
 let categoryFileCounts = {
   Bass: 5,
   Drums: 4,
@@ -76,20 +76,20 @@ function preload() {
     effectsList.forEach((effect) => {
       switch (effect) {
         case "delay":
-          effects[category][effect] = new Tone.FeedbackDelay();
+          effects[category][effect] = new Tone.PingPongDelay(.130);
           break;
         case "reverb":
-          effects[category][effect] = new Tone.Reverb();
+          effects[category][effect] = new Tone.Reverb(6);
           break;
         case "distortion":
           effects[category][effect] = new Tone.Distortion();
           break;
         case "tremolo":
-  effects[category][effect] = new Tone.Tremolo({
-    frequency: 200,  // Frequency of the effect in Hz
-    depth: 1,     // Depth of the effect from 0 to 1
-    spread: 180     // Spread of the effect in degrees
-  }).start();
+  case "vibrato":
+    effects[category][effect] = new Tone.Vibrato({
+      frequency: 5.0,  // Frequency of the effect in Hz
+      depth: .3,     // Depth of the effect from 0 to 1
+    });
   break;
         default:
           break;
