@@ -60,7 +60,16 @@ let currentEffects = {};
 let limiter = new Tone.Limiter(-1).toDestination();
 let allLoaded = false;
 
+let loadCount = 0;
+let totalFiles = 0;
+let loadingIndicator;
+
+for(let category in categoryFileCounts) {
+  totalFiles += categoryFileCounts[category];
+}
+
 function preload() {
+  loadingIndicator = createElement('p', 'Loading...');
   categories.forEach((category) => {
     players[category] = [];
     effects[category] = {};
@@ -102,6 +111,12 @@ function preload() {
           } else {
             player.mute = true;
           }
+           loadCount++;
+          if(loadCount === totalFiles) {
+            loadingIndicator.remove();
+            allLoaded = true;
+            setupInterface();  
+          }
         },
         loop: true, // Add this line
         onerror: (e) => {
@@ -114,10 +129,9 @@ function preload() {
   });
 }
 
-function setup() {
-  noCanvas();
+function setupInterface() {
 
-  let row1 = createElement("div");
+   let row1 = createElement("div");
   row1.addClass("row");
   let row2 = createElement("div");
   row2.addClass("row");
@@ -233,6 +247,7 @@ function setup() {
     });
   });
 
+  
   let playButton = createButton("Play");
   playButton.mousePressed(() => {
     if (Tone.context.state !== "running") {
@@ -245,6 +260,12 @@ function setup() {
   stopButton.mousePressed(() => {
     Tone.Transport.stop();
   });
+}
+
+function setup() {
+  noCanvas();
+
+  
 }
 
 function windowResized() {
