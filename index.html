@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.30/Tone.js"></script>
+    <script src="sketch.js"></script>  <!-- replace with the path to your JavaScript file -->
+    <title>Music Player</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        .row::after {
+            content: "";
+            clear: both;
+            display: table;
+        }
+        .column {
+            float: left;
+            width: 33.33%;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="column">
+            <div id="Bass-label"></div>
+            <div id="Bass-select"></div>
+            <div id="Bass-volume"></div>
+        </div>
+        <div class="column">
+            <div id="Drums-label"></div>
+            <div id="Drums-select"></div>
+            <div id="Drums-volume"></div>
+        </div>
+        <div class="column">
+            <div id="Lead-label"></div>
+            <div id="Lead-select"></div>
+            <div id="Lead-volume"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="column">
+            <div id="Chords-label"></div>
+            <div id="Chords-select"></div>
+            <div id="Chords-volume"></div>
+        </div>
+        <div class="column">
+            <div id="Percussion-label"></div>
+            <div id="Percussion-select"></div>
+            <div id="Percussion-volume"></div>
+        </div>
+        <div class="column">
+            <div id="EFX-label"></div>
+            <div id="EFX-select"></div>
+            <div id="EFX-volume"></div>
+        </div>
+    </div>
+
+</body>
+</html>
