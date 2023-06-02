@@ -86,7 +86,7 @@ function preload() {
           break;
         case "tremolo":
   effects[category][effect] = new Tone.Tremolo({
-    frequency: 500,  // Frequency of the effect in Hz
+    frequency: 200,  // Frequency of the effect in Hz
     depth: 1,     // Depth of the effect from 0 to 1
     spread: 180     // Spread of the effect in degrees
   }).start();
