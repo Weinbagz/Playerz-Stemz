@@ -97,34 +97,30 @@ function preload() {
     });
     for (let i = 0; i < categoryFileCounts[category]; i++) {
       let player = new Tone.Player({
-        url:
-          "https://storage.googleapis.com/playerz_cardz/audio/" +
-          category +
-          i +
-          ".mp3",
-        onload: () => {
-          console.log(category + i + ".mp3 has loaded.");
-          player.sync().start(0);
-          if (i === 0) {
-            currentPlayers[category] = player;
-            player.mute = false;
-          } else {
-            player.mute = true;
-          }
-          loadCount++;
-          if (loadCount === totalFiles) {
-            loadingIndicator.remove();
-            allLoaded = true;
-            setupInterface();
-          }
-        },
-        loop: true, // Add this line
-        onerror: (e) => {
-          console.log("Error loading " + category + i + ".mp3");
-          console.error(e);
-        },
-      }).connect(limiter);
-      players[category].push(player);
+  url:
+    "https://storage.googleapis.com/playerz_cardz/audio/" +
+    category +
+    i +
+    ".mp3",
+  onload: () => {
+    console.log(category + i + ".mp3 has loaded.");
+    player.sync().start(0); // Sync all players automatically, but start muted.
+    player.mute = true; // Start muted
+    loadCount++;
+    if (loadCount === totalFiles) {
+      loadingIndicator.remove();
+      allLoaded = true;
+      setupInterface();
+    }
+  },
+  loop: true, 
+  onerror: (e) => {
+    console.log("Error loading " + category + i + ".mp3");
+    console.error(e);
+  },
+}).connect(limiter);
+players[category].push(player);
+
     }
   });
 }
@@ -161,6 +157,8 @@ function setupInterface() {
     select.style("padding", "5px");
     select.style("border-radius", "4px");
 
+    // Include a 'None' option
+    select.option('None');
     for (let j = 0; j < categoryFileCounts[category]; j++) {
       select.option(categoryDisplayNames[category][j]);
     }
@@ -172,13 +170,22 @@ function setupInterface() {
       let player = players[category][index];
 
       if (currentPlayers[category]) {
-        currentPlayers[category].mute = true;
+        currentPlayers[category].mute = true; // Mute the current player.
       }
 
-      player.mute = false;
-      player.volume.value = volumeSliders[category].value();
-      currentPlayers[category] = player;
+      if (displayName !== 'None') {
+        if (Tone.context.state !== "running") {
+          Tone.start();
+        }
+
+        player.mute = false; // Unmute the selected player.
+        player.volume.value = volumeSliders[category].value();
+        Tone.Transport.start();
+        currentPlayers[category] = player;
+      }
     });
+
+    // The rest of your code remains the same
 
     let volumeContainer = createElement("div");
     volumeContainer.addClass("volume");
@@ -224,71 +231,15 @@ function setupInterface() {
 
       if (effectName !== "none") {
         currentPlayers[category].connect(effect);
-        effect.wet.value = wetDrySliders[category].value();
-        effect.connect(limiter); // connect new effect to limiter
+        effect.connect(limiter);
         currentEffects[category] = effect;
+      } else {
+        currentPlayers[category].connect(limiter);
       }
     });
-
-    let wetDryContainer = createElement("div");
-    wetDryContainer.addClass("wetDry");
-    wetDryContainer.parent(categoryContainer);
-
-    let wetDrySlider = createSlider(0, 1, 0, 0.01); // changed third argument from 0.5 to 0
-    wetDrySlider.parent(wetDryContainer);
-    wetDrySlider.style("width", "100%");
-    wetDrySlider.style("background-color", "#000");
-    wetDrySlider.style("color", "#fff");
-    wetDrySliders[category] = wetDrySlider;
-    wetDrySlider.input(() => {
-      let wetDryValue = wetDrySliders[category].value();
-      if (currentEffects[category]) {
-        currentEffects[category].wet.value = wetDryValue;
-      }
-    });
-  });
-
-  let playButton = createButton("Play");
-playButton.style("background-color", "#02e1e8"); // Green background
-playButton.style("border", "none"); // No border
-playButton.style("color", "02001C"); // White text
-playButton.style("padding", "15px 32px"); // Padding
-playButton.style("text-align", "center"); // Centered text
-playButton.style("text-decoration", "none"); // No underline
-playButton.style("display", "inline-block"); // Display as inline-block
-playButton.style("font-size", "16px"); // 16px font size
-playButton.style("margin", "4px 2px"); // Margins
-playButton.style("cursor", "pointer");
-playButton.style("border-radius", "5px"); // Rounded corners
-playButton.mousePressed(async () => {
-  if (Tone.context.state !== "running") {
-    await Tone.start();
-  }
-
-  // Unmute the current player for each category when the "Play" button is pressed
-  for (let category in currentPlayers) {
-    currentPlayers[category].mute = false;
-  }
-
-  Tone.Transport.start();
-});
-
-  let stopButton = createButton("Stop");
-  stopButton.style("background-color", "#f708f7"); // Red background
-  stopButton.style("border", "none"); // No border
-  stopButton.style("color", "white"); // White text
-  stopButton.style("padding", "15px 32px"); // Padding
-  stopButton.style("text-align", "center"); // Centered text
-  stopButton.style("text-decoration", "none"); // No underline
-  stopButton.style("display", "inline-block"); // Display as inline-block
-  stopButton.style("font-size", "16px"); // 16px font size
-  stopButton.style("margin", "4px 2px"); // Margins
-  stopButton.style("border-radius", "5px"); // Rounded corners
-  stopButton.style("cursor", "pointer"); // Pointer cursor on hover
-  stopButton.mousePressed(() => {
-    Tone.Transport.stop();
   });
 }
+
 
 function setup() {
   noCanvas();
