@@ -57,7 +57,7 @@ let effectsSelects = {};
 let wetDrySliders = {};
 let currentPlayers = {};
 let currentEffects = {};
-let limiter = new Tone.Limiter(-1).toDestination();
+let limiter = new Tone.Limiter(-.5).toDestination();
 let allLoaded = false;
 
 let loadCount = 0;
@@ -134,16 +134,17 @@ function setupInterface() {
   row1.addClass("row");
   let row2 = createElement("div");
   row2.addClass("row");
+  let row3 = createElement("div");
+  row3.addClass("row");
+
+  const rows = [row1, row2, row3];
 
   categories.forEach((category, i) => {
     let categoryContainer = createElement("div");
     categoryContainer.addClass("category");
 
-    if (i < categories.length / 2) {
-      categoryContainer.parent(row1);
-    } else {
-      categoryContainer.parent(row2);
-    }
+    const rowIndex = Math.floor(i / 2);
+    categoryContainer.parent(rows[rowIndex]);
 
     let categoryLabel = createElement("div", category);
     categoryLabel.addClass("label");
