@@ -1,3 +1,5 @@
+let startButton;
+let categoryDivs = {};
 let players = {};
 let effects = {};
 let categories = ["Bass", "Drums", "Lead", "Chords", "Percussion", "EFX"];
@@ -69,7 +71,19 @@ for (let category in categoryFileCounts) {
 }
 
 function preload() {
-  loadingIndicator = createElement("p", "Loading...");
+   loadingIndicator = createElement('p', 'Loading...');
+  startButton = createButton('Start');
+  startButton.hide();  // Hide the start button until everything is loaded
+  startButton.mousePressed(() => {
+    if (Tone.context.state !== 'running') {
+      Tone.start();
+    }
+     categories.forEach(category => {
+      categoryDivs[category].show();
+    });
+
+    startButton.remove();  // Remove the start button
+  });
   categories.forEach((category) => {
     players[category] = [];
     effects[category] = {};
@@ -126,18 +140,41 @@ players[category].push(player);
 }
 
 function setupInterface() {
+  startButton = createButton('Start');
+  startButton.parent(document.body);
+  startButton.addClass('start-button');
+  startButton.mousePressed(() => {
+    if (Tone.context.state !== 'running') {
+      Tone.start();
+    }
+
+    // Show the rest of the interface
+    categories.forEach(category => {
+      categoryDivs[category].style('display', 'block');
+    });
+
+    startButton.remove();  // Remove the start button
+  });
+
   let row1 = createElement("div");
   row1.addClass("row");
+  row1.parent(document.body);
+
   let row2 = createElement("div");
   row2.addClass("row");
+  row2.parent(document.body);
+
   let row3 = createElement("div");
   row3.addClass("row");
+  row3.parent(document.body);
 
   const rows = [row1, row2, row3];
 
   categories.forEach((category, i) => {
     let categoryContainer = createElement("div");
-    categoryContainer.addClass("category");
+    categoryContainer.style('display', 'none');
+    categoryDivs[category] = categoryContainer;
+    categoryContainer.addClass('category-div');
 
     const rowIndex = Math.floor(i / 2);
     categoryContainer.parent(rows[rowIndex]);
@@ -157,7 +194,6 @@ function setupInterface() {
     select.style("padding", "5px");
     select.style("border-radius", "4px");
 
-    // Include a 'None' option
     select.option('None');
     for (let j = 0; j < categoryFileCounts[category]; j++) {
       select.option(categoryDisplayNames[category][j]);
@@ -170,22 +206,16 @@ function setupInterface() {
       let player = players[category][index];
 
       if (currentPlayers[category]) {
-        currentPlayers[category].mute = true; // Mute the current player.
+        currentPlayers[category].mute = true;
       }
 
       if (displayName !== 'None') {
-        if (Tone.context.state !== "running") {
-          Tone.start();
-        }
-
-        player.mute = false; // Unmute the selected player.
+        player.mute = false;
         player.volume.value = volumeSliders[category].value();
         Tone.Transport.start();
         currentPlayers[category] = player;
       }
     });
-
-    // The rest of your code remains the same
 
     let volumeContainer = createElement("div");
     volumeContainer.addClass("volume");
@@ -226,7 +256,7 @@ function setupInterface() {
 
       if (currentEffects[category]) {
         currentPlayers[category].disconnect(currentEffects[category]);
-        currentEffects[category].disconnect(limiter); // disconnect old effect from limiter
+        currentEffects[category].disconnect(limiter);
       }
 
       if (effectName !== "none") {
@@ -238,7 +268,16 @@ function setupInterface() {
       }
     });
   });
+
+  // when all audio files are loaded
+  if (loadCount === totalFiles) {
+    loadingIndicator.remove();
+    allLoaded = true;
+    startButton.style('display', 'block');  // Show the start button after everything has loaded
+  }
 }
+
+
 
 
 function setup() {
