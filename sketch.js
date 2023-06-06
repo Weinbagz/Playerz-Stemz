@@ -249,21 +249,27 @@ function setupInterface() {
   });
 
   let playButton = createButton("Play");
-  playButton.style("background-color", "#02e1e8"); // Green background
-  playButton.style("border", "none"); // No border
-  playButton.style("color", "02001C"); // White text
-  playButton.style("padding", "15px 32px"); // Padding
-  playButton.style("text-align", "center"); // Centered text
-  playButton.style("text-decoration", "none"); // No underline
-  playButton.style("display", "inline-block"); // Display as inline-block
-  playButton.style("font-size", "16px"); // 16px font size
-  playButton.style("margin", "4px 2px"); // Margins
-  playButton.style("cursor", "pointer");
-  playButton.style("border-radius", "5px"); // Rounded corners
-  playButton.mousePressed(async () => {
+playButton.style("background-color", "#02e1e8"); // Green background
+playButton.style("border", "none"); // No border
+playButton.style("color", "02001C"); // White text
+playButton.style("padding", "15px 32px"); // Padding
+playButton.style("text-align", "center"); // Centered text
+playButton.style("text-decoration", "none"); // No underline
+playButton.style("display", "inline-block"); // Display as inline-block
+playButton.style("font-size", "16px"); // 16px font size
+playButton.style("margin", "4px 2px"); // Margins
+playButton.style("cursor", "pointer");
+playButton.style("border-radius", "5px"); // Rounded corners
+playButton.mousePressed(async () => {
   if (Tone.context.state !== "running") {
     await Tone.start();
   }
+
+  // Unmute the current player for each category when the "Play" button is pressed
+  for (let category in currentPlayers) {
+    currentPlayers[category].mute = false;
+  }
+
   Tone.Transport.start();
 });
 
