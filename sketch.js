@@ -260,12 +260,12 @@ function setupInterface() {
   playButton.style("margin", "4px 2px"); // Margins
   playButton.style("cursor", "pointer");
   playButton.style("border-radius", "5px"); // Rounded corners
-  playButton.mousePressed(() => {
-    if (Tone.context.state !== "running") {
-      Tone.start();
-    }
-    Tone.Transport.start();
-  });
+  playButton.mousePressed(async () => {
+  if (Tone.context.state !== "running") {
+    await Tone.start();
+  }
+  Tone.Transport.start();
+});
 
   let stopButton = createButton("Stop");
   stopButton.style("background-color", "#f708f7"); // Red background
