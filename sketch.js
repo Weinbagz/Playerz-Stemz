@@ -1,3 +1,4 @@
+
 let players = {};
 let effects = {};
 let categories = ["Bass", "Drums", "Lead", "Chords", "Percussion", "EFX"];
@@ -58,6 +59,7 @@ let wetDrySliders = {};
 let currentPlayers = {};
 let currentEffects = {};
 let limiter = new Tone.Limiter(-.5).toDestination();
+
 let allLoaded = false;
 
 let loadCount = 0;
@@ -263,6 +265,7 @@ playButton.style("border-radius", "5px"); // Rounded corners
 playButton.mousePressed(async () => {
   if (Tone.context.state !== "running") {
     await Tone.start();
+    unmute(Tone.context); // Call unmute function here
   }
 
   // Unmute the current player for each category when the "Play" button is pressed
