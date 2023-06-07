@@ -81,6 +81,33 @@ select:hover, input[type="range"]:hover {
   margin-top: 20px;
 }
 
+.wetDry input[type=range] {
+  width: 100%;
+  margin-top: 20px;
+  appearance: none;
+  height: 15px;
+  background: #3a3b3c;
+  border-radius: 15px;
+  outline: none;
+}
+
+.wetDry input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  
+  background: #f708f7;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.wetDry input[type=range]::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  background: #f708f7;
+  cursor: pointer;
+  border-radius: 50%;
+}
 
 .volume input[type=range]::-moz-range-thumb {
   width: 25px;
