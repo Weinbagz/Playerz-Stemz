@@ -260,10 +260,10 @@ effectsLabel.style("font-size", "16px");
     });
   });
   
-  let playlabel = createElement("p", "Press Play Twice On Mobile");
+  let playlabel = createElement("p", "Press Play Twice To Activate Sound");
 
 playlabel.style("color", "#f708f7");
-playlabel.style("font-size", "16px");
+playlabel.style("font-size", "18px");
 
   let playButton = createButton("Play");
 playButton.style("background-color", "#02e1e8"); // Green background
