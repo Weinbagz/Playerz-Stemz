@@ -145,8 +145,8 @@ function setupInterface() {
     let categoryContainer = createElement("div");
     categoryContainer.addClass("category");
 
-    const rowIndex = Math.floor(i / 2);
-    categoryContainer.parent(rows[rowIndex]);
+    const rowIndex = window.innerWidth > 768 ? Math.floor(i / 3) : Math.floor(i / 2);
+  categoryContainer.parent(rows[rowIndex]);
 
     let categoryLabel = createElement("div", category);
     categoryLabel.addClass("label");
@@ -306,6 +306,22 @@ playButton.mousePressed(async () => {
   stopButton.mousePressed(() => {
     Tone.Transport.stop();
   });
+ // Appending rows directly to the body
+rows.forEach(row => row.parent(document.body));
+
+// Appending control buttons directly to the body
+playlabel.parent(document.body);
+playButton.parent(document.body);
+stopButton.parent(document.body);
+}
+window.addEventListener('resize', () => {
+  clearInterface();
+  setupInterface();
+});
+
+function clearInterface() {
+  // Clear all elements created by setupInterface function
+  document.querySelectorAll('.row, .category, .label, .select, .volume, .effects, .wetDry, p, button').forEach(element => element.remove());
 }
 
 function setup() {
