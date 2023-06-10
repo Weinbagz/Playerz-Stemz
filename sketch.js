@@ -145,8 +145,8 @@ function setupInterface() {
     let categoryContainer = createElement("div");
     categoryContainer.addClass("category");
 
-    const rowIndex = window.innerWidth > 768 ? Math.floor(i / 3) : Math.floor(i / 2);
-  categoryContainer.parent(rows[rowIndex]);
+    const rowIndex = Math.floor(i / 2);
+    categoryContainer.parent(rows[rowIndex]);
 
     let categoryLabel = createElement("div", category);
     categoryLabel.addClass("label");
@@ -185,11 +185,6 @@ function setupInterface() {
     let volumeContainer = createElement("div");
     volumeContainer.addClass("volume");
     volumeContainer.parent(categoryContainer);
-    
-    let volumeLabel = createElement("p", "Volume");
-volumeLabel.parent(volumeContainer);
-volumeLabel.style("color", "#f708f7");
-volumeLabel.style("font-size", "16px");
 
     let volumeSlider = createSlider(-60, 0, 0);
     volumeSlider.parent(volumeContainer);
@@ -208,11 +203,6 @@ volumeLabel.style("font-size", "16px");
     effectsContainer.addClass("effects");
     effectsContainer.parent(categoryContainer);
 
-    let effectsLabel = createElement("p", "Effects");
-effectsLabel.parent(effectsContainer);
-effectsLabel.style("color", "#f708f7");
-effectsLabel.style("font-size", "16px");
-    
     let effectsSelect = createSelect();
     effectsSelect.parent(effectsContainer);
     effectsSelect.style("background", "#FFFFFF");
@@ -259,11 +249,6 @@ effectsLabel.style("font-size", "16px");
       }
     });
   });
-  
-  let playlabel = createElement("p", "Press Play Twice To Activate Sound");
-
-playlabel.style("color", "#f708f7");
-playlabel.style("font-size", "18px");
 
   let playButton = createButton("Play");
 playButton.style("background-color", "#02e1e8"); // Green background
@@ -306,22 +291,6 @@ playButton.mousePressed(async () => {
   stopButton.mousePressed(() => {
     Tone.Transport.stop();
   });
- // Appending rows directly to the body
-rows.forEach(row => row.parent(document.body));
-
-// Appending control buttons directly to the body
-playlabel.parent(document.body);
-playButton.parent(document.body);
-stopButton.parent(document.body);
-}
-window.addEventListener('resize', () => {
-  clearInterface();
-  setupInterface();
-});
-
-function clearInterface() {
-  // Clear all elements created by setupInterface function
-  document.querySelectorAll('.row, .category, .label, .select, .volume, .effects, .wetDry, p, button').forEach(element => element.remove());
 }
 
 function setup() {
